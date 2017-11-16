@@ -1,0 +1,14 @@
+.row > div {
+	display: inline;
+	padding: 5px 5px;
+	/*	border: 1px solid black;
+	*/
+}
+
+.row {
+	margin: 10px 0px;
+}
+
+#test {
+	border: 2px solid black;
+}
