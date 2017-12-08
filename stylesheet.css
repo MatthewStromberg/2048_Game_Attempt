@@ -1,14 +1,40 @@
-.row > div {
-	display: inline;
-	padding: 5px 5px;
-	/*	border: 1px solid black;
-	*/
+* {
+	margin: 0;
 }
 
-.row {
-	margin: 10px 0px;
+section {
+	width: 50%;
+	border-radius: 10px;
+	margin: 10% auto !important;
+	padding-right: 10px;
+	padding-left: 10px;
+	height: 30vw;
+	background-color: #BBADA0;
+	border: 1px;
 }
 
-#test {
-	border: 2px solid black;
+div {
+	text-align: center;
+	vertical-align: middle;
+	background: #CDC1B4;
+	float: left;
+	height: 5vw;
+	margin: 1%;
+	padding-top: 1.5vw;
+	width: 23.5%;
+	font-size: 250%;
+}
+
+div:nth-child(4n-3) {
+	background: #CDC1B4;
+	margin-left: 0;
+}
+
+div:nth-child(4n) {
+	background: #CDC1B4;
+	margin-right: 0;
+}
+
+section {
+	margin: 0 20px;
 }

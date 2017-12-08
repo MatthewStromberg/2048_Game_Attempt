@@ -1,61 +1,85 @@
 var height = 4
 	, width = 4
 	, SIZE = 4;
+var wasCombined = false; //Were atleast 2 pieces combiend in the last move?
 var myArray = twoDimArray(height, width, 0);
-addPiece();
-addPiece();
+/*
+START
+*/
+$(document).ready(function () {
+	addPiece();
+	addPiece();
+	updateFrontEnd();
+});
+//updateFrontEnd();
 Array.prototype.printArray(myArray);
 //Array.prototype.printArray(myArray);
 $(document).keydown(function (e) {
 	switch (e.which) {
+		/*
+		Rotate board until the designated motion would be oriented right, 
+		then undo it with more rotations after the pices have been moved.
+		*/
 	case 37: // left
-		//		console.log("Left");
 		rotateBoard();
 		rotateBoard();
 		SlidePieces();
 		rotateBoard();
 		rotateBoard();
-		addPiece();
-		//		console.clear();
+		if (wasCombined) addPiece();
 		Array.prototype.printArray(myArray);
 		break;
 	case 38: // up
-		//		console.log("Up");
 		rotateBoard();
 		SlidePieces();
 		rotateBoard();
 		rotateBoard();
 		rotateBoard();
-		addPiece();
-		//		console.clear();
+		if (wasCombined) addPiece();
 		Array.prototype.printArray(myArray);
 		break;
 	case 39: // right
-		//		console.log("Right");
 		SlidePieces();
-		addPiece();
-		//		console.clear();
+		if (wasCombined) addPiece();
 		Array.prototype.printArray(myArray);
 		break;
 	case 40: // down
-		//		console.log("Down");
 		rotateBoard();
 		rotateBoard();
 		rotateBoard();
 		SlidePieces();
 		rotateBoard();
-		addPiece();
-		//		console.clear();
+		if (wasCombined) addPiece();
 		Array.prototype.printArray(myArray);
 		break;
 	default:
 		return; // exit this handler for other keys
 	}
+	updateFrontEnd();
 	e.preventDefault(); // prevent the default action (scroll / move caret)
 });
 
-function dispatcher(direction) {
-	//	var directionValues = {RIGHT:0,DOWN: }
+function updateFrontEnd() {
+	for (var i = 0; i < SIZE; i++) {
+		for (var j = 0; j < SIZE; j++) {
+			console.log("Num: " + ((i * 4) + (j)));
+			var index = (i * 4) + (j + 1);
+			$("section div:nth-child(" + index + ")").text(myArray[i][j]);
+			var color = "";
+			switch (myArray[i][j]) {
+			case 2:
+				color = "red";
+				break;
+			case 4:
+				color = "blue";
+				break;
+			default:
+				color = "grey";
+				break;
+			}
+			$("section div:nth-child(" + index + ")").css("background-color", color)
+		}
+	}
 }
 
 function SlidePieces() {
@@ -73,6 +97,7 @@ function SlidePieces() {
 			}
 		}
 		while (whereToSplice.length > 0) {
+			wasCombined = true;
 			myArray[i].splice(whereToSplice[0], 1);
 			whereToSplice.shift();
 		}
@@ -82,8 +107,10 @@ function SlidePieces() {
 		Array.prototype.unshift.apply(myArray[i], x);
 	}
 }
-
-function rotateBoard() { //***ROTATES CLOCKWISE***}
+/*
+Rotate the board Clockwise
+*/
+function rotateBoard() {
 	for (var i = 0; i < SIZE / 2; i++) {
 		for (var j = 0; j < Math.ceil(SIZE / 2); j++) {
 			var temp = myArray[i][j];
@@ -95,7 +122,11 @@ function rotateBoard() { //***ROTATES CLOCKWISE***}
 	}
 	return myArray;
 }
-
+/*
+If there is the need, add a piece.
+The piece will be added randomly to a spot which has a 0. 
+Choose a spot on the board which has a zero, loop until that spot is found. 
+*/
 function addPiece() {
 	var string = myArray.map(e => e.join(',')).join(';')
 		, x = -1
